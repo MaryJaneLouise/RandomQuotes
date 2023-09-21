@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.mariejuana.randomquotes.R
 
 class FaveFragment : Fragment() {
@@ -63,7 +64,7 @@ class FaveFragment : Fragment() {
         }
         buttonFaveQuote.setOnClickListener{
             clearFavoriteQuote()
-            // Update the TextView to show there's no current favorite quote
+            Toast.makeText(requireContext(), "The quote has been deleted.", Toast.LENGTH_SHORT).show()            // Update the TextView to show there's no current favorite quote
             textViewQuote.text = "There's no current favorite quote."
         }
         return view

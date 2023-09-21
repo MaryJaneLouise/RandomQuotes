@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.mariejuana.randomquotes.R
 
 class SharedFragment(var typeQuote : Int) : Fragment() {
@@ -97,6 +98,7 @@ class SharedFragment(var typeQuote : Int) : Fragment() {
 
                 buttonFaveQuote.setOnClickListener{
                     saveFavoriteQuote(randomQuote)
+                    Toast.makeText(requireContext(), "The quote has been saved.", Toast.LENGTH_SHORT).show()
                 }
             }
             2 -> {
@@ -115,6 +117,7 @@ class SharedFragment(var typeQuote : Int) : Fragment() {
 
                 buttonFaveQuote.setOnClickListener{
                     saveFavoriteQuote(randomQuote)
+                    Toast.makeText(requireContext(), "The quote has been saved.", Toast.LENGTH_SHORT).show()
                 }
             }
             3 -> {
@@ -133,6 +136,7 @@ class SharedFragment(var typeQuote : Int) : Fragment() {
 
                 buttonFaveQuote.setOnClickListener{
                     saveFavoriteQuote(randomQuote)
+                    Toast.makeText(requireContext(), "The quote has been saved.", Toast.LENGTH_SHORT).show()
                 }
             }
             else -> {
