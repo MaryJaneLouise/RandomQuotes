@@ -10,16 +10,11 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.mariejuana.randomquotes.R
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class FaveFragment : Fragment() {
-
-    private fun saveFavoriteQuote(quote: String) {
-        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("favoriteQuote", quote)
-        editor.apply()
-    }
-
     private fun clearFavoriteQuote() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
@@ -27,7 +22,6 @@ class FaveFragment : Fragment() {
         editor.remove("favoriteQuote")
         editor.apply()
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,16 +41,19 @@ class FaveFragment : Fragment() {
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val favoriteQuote = sharedPreferences.getString("favoriteQuote", "")
+        val timestamp = sharedPreferences.getLong("favoriteQuoteTime", 0)
 
         if (favoriteQuote.isNullOrEmpty()) {
             textViewQuote.text = "There's no current favorite quote."
             buttonFaveQuote.isEnabled = false
         } else {
-            textViewQuote.text = favoriteQuote
+            val formattedTimestamp = SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(
+                Date(timestamp)
+            )
+
+            textViewQuote.text = "Favorite Quote:\n$favoriteQuote\n\nTimestamp: $formattedTimestamp"
             buttonFaveQuote.isEnabled = true
         }
-
-
 
         buttonGoBack.setOnClickListener{
             val fragment = MainFragment()

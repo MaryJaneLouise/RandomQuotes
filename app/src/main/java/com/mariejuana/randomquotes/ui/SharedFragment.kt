@@ -2,7 +2,6 @@ package com.mariejuana.randomquotes.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,10 +22,16 @@ class SharedFragment(var typeQuote : Int) : Fragment() {
 
     private fun saveFavoriteQuote(quote: String) {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
 
-        val finalEdit = sharedPreferences.edit()
-        finalEdit.putString("favoriteQuote", quote)
-        finalEdit.apply()
+        val timestamp = System.currentTimeMillis()
+        val quoteKey = "favoriteQuote"
+        val timestampClock = "favoriteQuoteTime"
+
+        editor.putString(quoteKey, quote)
+        editor.putLong(timestampClock, timestamp)
+
+        editor.apply()
     }
 
     private val quotes_love = arrayOf(
@@ -66,7 +71,6 @@ class SharedFragment(var typeQuote : Int) : Fragment() {
         "I'm not saying I'm Wonder Woman, I'm just saying no one has ever seen me and Wonder Woman in the same room together.\n - Unknown",
         "Life is not a bed of roses neither it is full of thorns. Prosperity in every field of life never comes to you on its own. YOU HAVE TO STRUGGLE HARD TO GET TO IT.\n - My Daddae Herbs"
     )
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -110,7 +114,7 @@ class SharedFragment(var typeQuote : Int) : Fragment() {
 
                 buttonRandomQuote.setOnClickListener{
                     val randomIndex = (quotes_inspiration.indices).random()
-                    val randomQuote = quotes_love[randomIndex]
+                    val randomQuote = quotes_inspiration[randomIndex]
 
                     textViewQuote.text = randomQuote
                 }
