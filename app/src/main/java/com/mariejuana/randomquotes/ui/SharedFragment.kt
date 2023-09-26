@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.mariejuana.randomquotes.R
 
 class SharedFragment(var typeQuote : Int) : Fragment() {
@@ -18,6 +19,12 @@ class SharedFragment(var typeQuote : Int) : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     private fun saveFavoriteQuote(quote: String) {

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.mariejuana.randomquotes.R
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -26,6 +27,12 @@ class FaveFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onCreateView(
@@ -47,7 +54,7 @@ class FaveFragment : Fragment() {
             textViewQuote.text = "There's no current favorite quote."
             buttonFaveQuote.isEnabled = false
         } else {
-            val formattedTimestamp = SimpleDateFormat("MM-dd-yyyy", Locale.getDefault()).format(
+            val formattedTimestamp = SimpleDateFormat("MM-dd-yyyy | hh:mm:ss", Locale.getDefault()).format(
                 Date(timestamp)
             )
 

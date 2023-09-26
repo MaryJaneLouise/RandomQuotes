@@ -1,12 +1,15 @@
 package com.mariejuana.randomquotes.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mariejuana.randomquotes.R
 import java.util.Calendar
 
@@ -63,6 +66,13 @@ class MainFragment : Fragment() {
         val seed = dayOfYear.toLong()
 
         quoteOfTheDay = getQuoteOfTheDay(seed)
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onCreateView(
@@ -82,19 +92,19 @@ class MainFragment : Fragment() {
 
         buttonLove.setOnClickListener{
             val fragment = SharedFragment(1)
-            fragmentManager?.beginTransaction()?.replace(R.id.fragment_container, fragment)?.commit()
+            fragmentManager?.beginTransaction()?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
         }
         buttonInspiration.setOnClickListener{
             val fragment = SharedFragment(2)
-            fragmentManager?.beginTransaction()?.replace(R.id.fragment_container, fragment)?.commit()
+            fragmentManager?.beginTransaction()?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
         }
         buttonFunny.setOnClickListener{
             val fragment = SharedFragment(3)
-            fragmentManager?.beginTransaction()?.replace(R.id.fragment_container, fragment)?.commit()
+            fragmentManager?.beginTransaction()?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
         }
         buttonFave.setOnClickListener{
             val fragment = FaveFragment()
-            fragmentManager?.beginTransaction()?.replace(R.id.fragment_container, fragment)?.commit()
+            fragmentManager?.beginTransaction()?.replace(R.id.fragment_container, fragment)?.addToBackStack(null)?.commit()
         }
         return view
     }
