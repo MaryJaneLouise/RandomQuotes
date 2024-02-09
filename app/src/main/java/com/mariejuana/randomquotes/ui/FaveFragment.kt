@@ -11,11 +11,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.mariejuana.randomquotes.R
+import com.mariejuana.randomquotes.databinding.FragmentFaveBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class FaveFragment : Fragment() {
+    private lateinit var binding: FragmentFaveBinding
+
+    // Clears the SharedPreferences
     private fun clearFavoriteQuote() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
@@ -40,37 +44,47 @@ class FaveFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_fave, container, false)
-        val buttonGoBack : Button = view.findViewById(R.id.buttonBackToHome)
-        val buttonFaveQuote : Button = view.findViewById(R.id.buttonFaveQuote)
+        binding = FragmentFaveBinding.inflate(layoutInflater, container, false)
 
-        val textViewQuote : TextView = view.findViewById(R.id.text_quote)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Accesses the SharedPreferences for the favorite quotes
         val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val favoriteQuote = sharedPreferences.getString("favoriteQuote", "")
         val timestamp = sharedPreferences.getLong("favoriteQuoteTime", 0)
 
         if (favoriteQuote.isNullOrEmpty()) {
-            textViewQuote.text = "There's no current favorite quote."
-            buttonFaveQuote.isEnabled = false
+            with(binding) {
+                textQuote.text = "There's no current favorite quote."
+                buttonFaveQuote.isEnabled = false
+            }
         } else {
+            // Convert the timepstamp into a date-time format
             val formattedTimestamp = SimpleDateFormat("MM-dd-yyyy | hh:mm:ss", Locale.getDefault()).format(
                 Date(timestamp)
             )
 
-            textViewQuote.text = "Favorite Quote:\n$favoriteQuote\n\nTimestamp: $formattedTimestamp"
-            buttonFaveQuote.isEnabled = true
+            with(binding) {
+                textQuote.text = "Favorite Quote:\n$favoriteQuote\n\nTimestamp: \n$formattedTimestamp"
+                buttonFaveQuote.isEnabled = true
+            }
         }
 
-        buttonGoBack.setOnClickListener{
-            val fragment = MainFragment()
-            fragmentManager?.beginTransaction()?.replace(R.id.fragment_container, fragment)?.commit()
+        with(binding) {
+            buttonBackToHome.setOnClickListener{
+                val fragment = MainFragment()
+                parentFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+            }
+
+            buttonFaveQuote.setOnClickListener{
+                clearFavoriteQuote()
+                Toast.makeText(requireContext(), "The quote has been deleted.", Toast.LENGTH_SHORT).show()            // Update the TextView to show there's no current favorite quote
+                textQuote.text = "There's no current favorite quote."
+            }
         }
-        buttonFaveQuote.setOnClickListener{
-            clearFavoriteQuote()
-            Toast.makeText(requireContext(), "The quote has been deleted.", Toast.LENGTH_SHORT).show()            // Update the TextView to show there's no current favorite quote
-            textViewQuote.text = "There's no current favorite quote."
-        }
-        return view
     }
 }
